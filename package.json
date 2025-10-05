@@ -1,0 +1,30 @@
+{
+  "name": "mongodb-movies",
+  "version": "1.0.0",
+  "description": "mongodb movies app.",
+  "main": "app.js",
+  
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omiras/mongodb-movies.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/omiras/mongodb-movies/issues"
+  },
+  "homepage": "https://github.com/omiras/mongodb-movies#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "mongodb": "^6.20.0",
+    "morgan": "^1.10.1"
+  }
+}

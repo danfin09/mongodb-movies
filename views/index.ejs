@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MongoDB Movies</title>
+    <style>
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .movie-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background: white;
+        }
+        .movie-poster {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .movie-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .movie-year {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>MongoDB Movies</h1>
+    
+    <% if (error) { %>
+        <div style="color: red; padding: 10px; background: #ffe6e6;">
+            <%= error %>
+        </div>
+    <% } %>
+    
+    <div class="movie-grid">
+        <% movies.forEach(movie => { %>
+            <div class="movie-card">
+                <!-- Movie Image -->
+                <% if (movie.poster) { %>
+                    <img src="<%= movie.poster %>" 
+                         alt="<%= movie.title %>" 
+                         class="movie-poster"
+                         onerror="this.style.display='null'">
+                <% } else { %>
+                    <div class="movie-poster" style="background: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                        No Image
+                    </div>
+                <% } %>
+                
+                <!-- Movie Title -->
+                <div class="movie-title">
+                    <%= movie.title %>
+                </div>
+                
+                <!-- Release Date -->
+                <div class="movie-year">
+                     Released: <%= movie.year %>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+    
+</body>
+</html>
