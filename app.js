@@ -1,4 +1,3 @@
-// Import required modules
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
@@ -6,7 +5,7 @@ const { MongoClient, ObjectId } = require('mongodb');
 require('dotenv').config();
 
 
-// Create Express application
+// Express application
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -19,7 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Serve static files (CSS, images, JS)
 app.use(express.static(path.join(__dirname, 'public')));
 
 // MongoDB connection
@@ -30,21 +28,20 @@ let db;
 async function connectDB() {
     try {
         await client.connect();
-        db = client.db('sample_mflix'); // Connect to sample_mflix database
-        console.log('✅ Connected to MongoDB successfully');
+        db = client.db('sample_mflix'); 
+        console.log('Connected to MongoDB successfully');
         
-        // Test the connection
         const moviesCount = await db.collection('movies').countDocuments();
-        console.log(`📊 Found ${moviesCount} movies in database`);
+        console.log(`Found ${moviesCount} movies in database`);
     } catch (error) {
-        console.error('❌ MongoDB connection failed:', error.message);
+        console.error('MongoDB connection failed:', error.message);
     }
 }
 connectDB();
 
 app.get('/', async (req, res) => {
     try {
-        // Check if database is connected
+        
         if (!db) {
             return res.render('index', { 
                 movies: [], 
@@ -52,12 +49,11 @@ app.get('/', async (req, res) => {
             });
         }
 
-        // Get 10 most recent movies from database
-        const movies = await db.collection('movies')
-            .find({})                    // Find all documents
-            .sort({ year: -1 })          // Sort by year descending (newest first)
-            .limit(10)                   // Only get 10 movies
-            .toArray();                  // Convert to JavaScript array
+           const movies = await db.collection('movies')
+            .find({})                    
+            .sort({ year: -1 })         
+            .limit(10)                  
+            .toArray();                  
 
         // Render the index page with movie data
         res.render('index', { 
@@ -78,22 +74,13 @@ app.get('/', async (req, res) => {
         if (!db) {
             return res.render('index', { 
                 movies: [], 
-                genres: [],
                 query: {},
                 error: 'Database not connected' 
             });
         }
 
-        // BUILD SEARCH FILTER
         const filter = {};
-        
-        // Filter by genre
-        if (req.query.genre) {
-            filter.genres = { $in: [req.query.genre] };
-            // MongoDB: find movies where genres array contains the selected genre
-        }
-        
-        // Filter by type (movie/series)
+
         if (req.query.type) {
             filter.type = req.query.type;
         }
@@ -102,10 +89,10 @@ app.get('/', async (req, res) => {
         if (req.query.yearFrom || req.query.yearTo) {
             filter.year = {};
             if (req.query.yearFrom) {
-                filter.year.$gte = parseInt(req.query.yearFrom); // Greater than or equal
+                filter.year.$gte = parseInt(req.query.yearFrom); 
             }
             if (req.query.yearTo) {
-                filter.year.$lte = parseInt(req.query.yearTo); // Less than or equal
+                filter.year.$lte = parseInt(req.query.yearTo);
             }
         }
         
@@ -131,14 +118,13 @@ app.get('/', async (req, res) => {
             .limit(10)
             .toArray();
 
-        // Get unique genres for dropdown
         const genres = await db.collection('movies').distinct('genres');
 
         // RENDER PAGE WITH DATA
         res.render('index', { 
             movies, 
             genres,
-            query: req.query, // Pass search query back to form
+            query: req.query, 
             error: null
         });
     } catch (error) {
@@ -158,16 +144,17 @@ app.get('/movies/add-form', async (req, res) => {
         if (!db) {
             return res.status(500).send('Database not connected');
         }
-
-        // Get data for dropdowns
         const titles = await db.collection('movies').distinct('title');
         const released = await db.collection('movies').distinct('released');
         const images = await db.collection('movies').distinct('poster');
+        const genres = await db.collection('movies').distinct('genres');
 
         res.render('add-movie', {
             titles: titles || [],
             released: released || [],
-            images: images || []
+            images: images || [],
+            genres: genres || []
+
         });
     } catch (error) {
         console.error('Error loading form:', error);
@@ -181,29 +168,18 @@ app.post('/movies/add-form', async (req, res) => {
         if (!db) {
             return res.status(500).send('Database not connected');
         }
-
-        // PREPARE MOVIE DATA FROM FORM
+        
         const movieData = {
             title: req.body.title,
             year: parseInt(req.body.year),
-            runtime: parseInt(req.body.runtime) || 0,
-            genres: Array.isArray(req.body.genres) ? req.body.genres : [req.body.genres],
-            cast: req.body.cast ? req.body.cast.split(',').map(s => s.trim()) : [],
-            plot: req.body.plot,
-            type: req.body.type,
-            directors: req.body.directors ? req.body.directors.split(',').map(s => s.trim()) : [],
-            languages: req.body.languages ? [req.body.languages] : ['English'],
-            countries: req.body.countries ? req.body.countries.split(',').map(s => s.trim()) : ['USA'],
-            rated: req.body.rated || 'NOT RATED',
             poster: req.body.poster,
             lastupdated: new Date().toISOString()
         };
-
-        // INSERT INTO DATABASE
+        
         const result = await db.collection('movies').insertOne(movieData);
         
         if (result.insertedId) {
-            // Success - redirect to homepage with success message
+            
             res.redirect('/?success=Movie added successfully!');
         } else {
             res.status(500).send('Error inserting movie');
@@ -214,12 +190,6 @@ app.post('/movies/add-form', async (req, res) => {
     }
 });
 
-// Basic route to test server
-app.get('/', (req, res) => {
-    res.send('MongoDB Server is working!');
-});
-
-// Start the server
 app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
 });

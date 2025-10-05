@@ -24,7 +24,7 @@
             border-radius: 4px;
         }
         .movie-title {
-            font-size: 1.2em;
+            font-size: 1.5em;
             font-weight: bold;
             margin: 10px 0;
         }
@@ -45,7 +45,7 @@
     <div class="movie-grid">
         <% movies.forEach(movie => { %>
             <div class="movie-card">
-                <!-- Movie Image -->
+                
                 <% if (movie.poster) { %>
                     <img src="<%= movie.poster %>" 
                          alt="<%= movie.title %>" 
@@ -57,12 +57,15 @@
                     </div>
                 <% } %>
                 
-                <!-- Movie Title -->
+                
                 <div class="movie-title">
                     <%= movie.title %>
                 </div>
-                
-                <!-- Release Date -->
+
+                <div class="movie-genres">
+                    Genres: <%= movie.genres.join(', ') %>
+                </div>
+
                 <div class="movie-year">
                      Released: <%= movie.year %>
                 </div>
