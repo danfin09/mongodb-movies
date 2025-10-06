@@ -74,13 +74,9 @@
     </div>
 
     <!-- Search Form -->
-<form method="GET" action="/" style="background: white; padding: 2rem; border-radius: 8px; margin-bottom: 2rem;">
+<form method="GET" action="/" >
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
-        <div>
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" value="<%= query.title || '' %>" style="width: 100%; padding: 0.5rem;">
-        </div>
-              
+                      
         <div>
             <label for="genre">Genre:</label>
             <select id="genre" name="genre" style="width: 100%; padding: 0.5rem;">
@@ -95,25 +91,19 @@
         
         <div>
             <label for="type">Type:</label>
-            <select id="type" name="type" style="width: 100%; padding: 0.5rem;">
-                <option value="">All Types</option>
+            <select id="type" name="type" 
+                <option value="">All </option>
                 <option value="movie" <%= query.type === 'movie' ? 'selected' : '' %>>Movie</option>
                 <option value="series" <%= query.type === 'series' ? 'selected' : '' %>>Series</option>
             </select>
         </div>
         
         <div>
-            <label for="yearFrom">Year From:</label>
-            <input type="number" id="yearFrom" name="yearFrom" value="<%= query.yearFrom || '' %>" style="width: 100%; padding: 0.5rem;">
+            <label for="Released">Year of Released:</label>
+            <input type="number" id="yearReleased" name="yearReleased" value="<%= query.yearReleased || '' %>" style="width: 100%; padding: 0.5rem;">
         </div>
         
-        <div>
-            <label for="yearTo">Year To:</label>
-            <input type="number" id="yearTo" name="yearTo" value="<%= query.yearTo || '' %>" style="width: 100%; padding: 0.5rem;">
-        </div>
-        
-        
-    </div>
+     </div>
     
     <div style="display: flex; gap: 1rem;">
         <button type="submit" style="background: #3498db; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 4px; cursor: pointer;">

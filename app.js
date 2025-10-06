@@ -48,7 +48,6 @@ app.get('/', async (req, res) => {
                 movies: [], 
                 genres: [],
                 query: {},
-                title: 'Movie Database',
                 error: 'Database not connected. Please try again later.' 
             });
         }
