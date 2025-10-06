@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
 const { MongoClient, ObjectId } = require('mongodb');
+const { title } = require('process');
 require('dotenv').config();
 
 
@@ -45,6 +46,9 @@ app.get('/', async (req, res) => {
         if (!db) {
             return res.render('index', { 
                 movies: [], 
+                genres: [],
+                query: {},
+                title: 'Movie Database',
                 error: 'Database not connected. Please try again later.' 
             });
         }
@@ -74,12 +78,17 @@ app.get('/', async (req, res) => {
         if (!db) {
             return res.render('index', { 
                 movies: [], 
+                genres: [],
                 query: {},
                 error: 'Database not connected' 
             });
         }
 
         const filter = {};
+
+         if (req.query.genre) {
+            filter.genres = { $in: [req.query.genre] };
+        }
 
         if (req.query.type) {
             filter.type = req.query.type;
@@ -102,11 +111,7 @@ app.get('/', async (req, res) => {
             
         }
         
-        // Search in plot
-        if (req.query.plot) {
-            filter.plot = { $regex: req.query.plot, $options: 'i' };
-        }
-
+        
         // SORTING
         const sortOrder = req.query.sort === 'asc' ? 1 : -1;
         const sort = { year: sortOrder };
@@ -137,6 +142,9 @@ app.get('/', async (req, res) => {
         });
     }
 });
+
+
+
 
 // SHOW ADD MOVIE FORM
 app.get('/movies/add-form', async (req, res) => {
