@@ -82,7 +82,6 @@ app.get('/', async (req, res) => {
                 error: 'Database not connected' 
             });
         }
-
         const filter = {};
 
          if (req.query.genre) {
@@ -109,8 +108,7 @@ app.get('/', async (req, res) => {
             filter.title = { $regex: req.query.title, $options: 'i' };
             
         }
-        
-        
+                
         // SORTING
         const sortOrder = req.query.sort === 'asc' ? 1 : -1;
         const sort = { year: sortOrder };
@@ -187,7 +185,7 @@ app.post('/movies/add-form', async (req, res) => {
         
         if (result.insertedId) {
             
-            res.redirect('/?success=Movie added successfully!');
+            res.redirect('/?success=Movie added successfully');
         } else {
             res.status(500).send('Error inserting movie');
         }
