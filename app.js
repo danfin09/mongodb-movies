@@ -177,7 +177,7 @@ app.post('/movies/add-form', async (req, res) => {
         const movieData = {
             title: req.body.title,
             year: parseInt(req.body.year),
-            poster: req.body.poster,
+            poster: req.body.poster || '',
             lastupdated: new Date().toISOString()
         };
         
